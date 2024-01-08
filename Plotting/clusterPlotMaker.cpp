@@ -129,7 +129,7 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.roo
     map<string, manyMaps> allHisto2Dict_Cls;
     // /// histograms
     /// the number of bins such that bin width is approximately one pixel
-    allHisto2Dict_Cls.insert(make_pair("cluster_y_vs_x", manyMaps("cluster_y_vs_x", "cls_geo_x_global", "cls_geo_y_global", ROOT::RDF::TH2DModel("cluster_y_vs_x", "cluster_y_vs_x; x [cm]; y [cm]", 11286, 0, 33, 521, -0.7, 0.7))));
+    allHisto2Dict_Cls.insert(make_pair("cluster_y_vs_x", manyMaps("cluster_y_vs_x", "cls_geo_x_global", "cls_geo_y_global", ROOT::RDF::TH2DModel("cluster_y_vs_x", "cluster_y_vs_x; x [cm]; y [cm]; Particles/pixel*BX", 11286, 0, 33, 521, -0.7, 0.7))));
     
     string treeInS = "clusters";
     string treeInFileS = ""; 
