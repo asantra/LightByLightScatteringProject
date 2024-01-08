@@ -122,11 +122,11 @@ int getParticleNumbers(vector<int>* tru_trackId){
 }
 
 double getClsX(TVector3* cls){
-    double x = cls.X();
+    double x = cls->X();
     return x;
 }
 
 double getClsY(TVector3* cls){
-    double y = cls.Y();
+    double y = cls->Y();
     return y;
 }
