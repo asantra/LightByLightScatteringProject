@@ -81,7 +81,7 @@ void prepare2DHistogram(ROOT::RDF::RInterface<ROOT::Detail::RDF::RJittedFilter, 
 }
 
 
-void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots", string sampleTag = "Data", bool inGrid=false)
+void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.root", string sampleTag = "Data", bool inGrid=false)
 {
     // ### boolean to know which process should be done
     //  Record start time
