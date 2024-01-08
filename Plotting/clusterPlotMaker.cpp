@@ -176,7 +176,8 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.roo
 
     auto dSel    = d.Filter("isSignal==1")
                     .Define("nParticles", "getParticleNumbers(tru_trackId)")
-                    .Define("particleWgt", "nParticles")
+                    .Define("true_weight", "getTrueWeight(tru_weight)")
+                    .Define("particleWgt", "nParticles*true_weight")
                     .Define("cls_geo_x_global", "getClsX(rglobal_geo)")
                     .Define("cls_geo_y_global", "getClsY(rglobal_geo)");
 

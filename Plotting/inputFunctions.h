@@ -132,3 +132,8 @@ double getClsY(TVector3 cls){
     // std::cout << "y " << y << std::endl;
     return y;
 }
+
+double getTrueWeight(ROOT::VecOps::RVec<double> tru_weight){
+    double weight = tru_weight.at(0);
+    return weight;
+}
