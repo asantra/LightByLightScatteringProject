@@ -146,7 +146,7 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.roo
     }
     // add all files in a given folder
     else{
-        for(int j=1; j <=1; j++){
+        for(int j=1; j <=2; j++){
             try{
                 chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave00_Event"+to_string(j)+".root").c_str());
                 chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave01_Event"+to_string(j)+".root").c_str());
