@@ -158,7 +158,7 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots", s
                 chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave07_Event"+to_string(j)+".root").c_str());
                 chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave08_Event"+to_string(j)+".root").c_str());
             }
-            catch(){
+            catch(...){
                 std::cout << " something wrong here: " << (eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave08_Event"+to_string(j)+".root").c_str() << std::endl;
             }
         }
