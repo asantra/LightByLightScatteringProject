@@ -81,27 +81,14 @@ void prepare2DHistogram(ROOT::RDF::RInterface<ROOT::Detail::RDF::RJittedFilter, 
 }
 
 
-void clusterPlotMaker(string inputFolder, string outputFile, string version="1", string sampleTag = "Data", bool inGrid=false)
+void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots", string sampleTag = "Data", bool inGrid=false)
 {
     // ### boolean to know which process should be done
     //  Record start time
     gROOT->SetBatch();
     auto start = std::chrono::steady_clock::now();
-    bool isData = false;
-    bool isMC = false;
     ROOT::EnableImplicitMT();
 
-    /// work here if you also want MC
-    if (sampleTag == "Data"){
-        isData = true;
-    }
-    else if (sampleTag == "MC"){
-        isMC = true;
-    }
-    else{
-        std::cout << "Unknown option for Data/MC" << std::endl;
-        return;
-    }
     std::cout << "Making Some Distribution for  " << sampleTag << std::endl;
 
     TFile *myFile=nullptr;
@@ -110,7 +97,7 @@ void clusterPlotMaker(string inputFolder, string outputFile, string version="1",
     if (inGrid){
         // WIS cluster files
         eosDirS = "/storage/agrp/arkas/AllPixGrid/ProcessedData/SignalNextTrial_e1gpc_10.0_BX1to100/";
-        myFile = new TFile((eosDirS+inputFolder+outputFile).c_str(), "RECREATE");
+        myFile = new TFile((inputFolder+outputFile).c_str(), "RECREATE");
         std::cout << "The output file for histograms: " << outputFile.c_str() << std::endl;
     }
     // work on all files in a folder
