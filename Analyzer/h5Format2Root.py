@@ -22,10 +22,13 @@ def main():
     parser = argparse.ArgumentParser(description='Code to get root files from h5')
     parser.add_argument('-x', action="store", dest="xi", type=str, default="3")
     parser.add_argument('-g', action="store", dest="gamma", type=str, default="0.7")
+    parser.add_argument('-v', action="store", dest="version", type=str, default="1")
     args = parser.parse_args()
     xiInput      = args.xi
     gammaInput   = args.gamma
+    ver          = args.version
     
+    ### for local files
     inputDir  = "/Users/arkasantra/arka/Tom_Work_Theory/Plotting/h5Files/"
     storage   = "/Users/arkasantra/arka/Tom_Work_Theory/Plotting/rootFiles"
 
@@ -34,8 +37,14 @@ def main():
 
 
     # tf = TFile( storage+'/raw_lightbylight_xi'+str(xiInput)+'MeV.root', 'recreate' ) ### old convention
-    tf = TFile( storage+'/raw_lightbylight_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'.root', 'recreate' )
-    print("The output file: ", storage+'/raw_lightbylight_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'.root')
+    # tf = TFile( storage+'/raw_lightbylight_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'.root', 'recreate' )
+    # print("The output file: ", storage+'/raw_lightbylight_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'.root')
+    ### for E320, local
+    tf = TFile( storage+'/raw_e320_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'_v'+ver+'.root', 'recreate' )
+    print("The output file: ", storage+'/raw_e320_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'_v'+ver+'.root')
+    
+    
+    
 
     tt_out    = TTree( 'tt','tt' )
     vx_out    = ROOT.std.vector( float )()
@@ -69,10 +78,13 @@ def main():
     tt_out.Branch('time',time_out)
     tt_out.Branch('xi',xi_out)
 
-    print("The input h5 file directory: ", inputDir+"xi"+str(xiInput)+"_gamma"+str(gammaInput)+"/")
+    
     # fIns = glob.glob(inputDir+"/xi"+str(xiInput)+"/*.h5") ### old convention
-    fIns = glob.glob(inputDir+"xi"+str(xiInput)+"_gamma"+str(gammaInput)+"/*.h5")
-    #print(fIns)   
+    # fIns = glob.glob(inputDir+"xi"+str(xiInput)+"_gamma"+str(gammaInput)+"/*.h5")
+    ### for E320, local
+    print("The input h5 file directory: ", inputDir+"xi"+str(xiInput)+"_gamma"+str(gammaInput)+"/")
+    fIns = glob.glob(inputDir+"xi"+str(xiInput)+"_gamma"+str(gammaInput)+"_E320_v"+ver+"/*.h5")
+    print(fIns)   
     photonNumberList = []
     ##### work only on the events having same order of tracks as that of the highest tracked event
     for name in fIns:
@@ -89,21 +101,6 @@ def main():
 
     for name in fIns:
         ### clear output tree branches
-        mpid_out.clear()
-        pdgId_out.clear()
-        wgt_out.clear()
-        vx_out.clear()
-        vy_out.clear()
-        vz_out.clear()
-        px_out.clear()
-        py_out.clear()
-        pz_out.clear()
-        eta_out.clear()
-        theta_out.clear()
-        phi_out.clear()
-        E_out.clear()
-        xi_out.clear()
-        time_out.clear()
         
         #### input file
         fIn = h5py.File(name, 'r')
@@ -116,17 +113,35 @@ def main():
         momentum_value_photon = fIn['final-state/photon']['momentum'][()]
         position_value_photon = fIn['final-state/photon']['position'][()]
         weight_value_photon   = fIn['final-state/photon']['weight'][()]
-        # print("this file has ",len(id_value_photon)," photons")
-        if(highestPhotonEvents>50):
-            if len(id_value_photon) < highestPhotonEvents/2.0: 
-                print("This file ",name," has very few photons ",len(id_value_photon), " ---- NOT PROCESSING")
-                continue
-        else:
-            if len(id_value_photon) < highestPhotonEvents/10.0: 
-                print("This file ",name," has very few photons ",len(id_value_photon), " ---- NOT PROCESSING")
-                continue
+        print("this file has ",len(id_value_photon)," photons")
+
+        # if(highestPhotonEvents>50):
+        #     if len(id_value_photon) < highestPhotonEvents/2.0: 
+        #         print("This file ",name," has very few photons ",len(id_value_photon), " ---- NOT PROCESSING")
+        #         continue
+        # else:
+        #     if len(id_value_photon) < highestPhotonEvents/10.0: 
+        #         print("This file ",name," has very few photons ",len(id_value_photon), " ---- NOT PROCESSING")
+        #         continue
 
         for j in range(0, len(id_value_photon)):
+            if(photonNumber%10000==0): print("processed: ", photonNumber," photons")
+            mpid_out.clear()
+            pdgId_out.clear()
+            wgt_out.clear()
+            vx_out.clear()
+            vy_out.clear()
+            vz_out.clear()
+            px_out.clear()
+            py_out.clear()
+            pz_out.clear()
+            eta_out.clear()
+            theta_out.clear()
+            phi_out.clear()
+            E_out.clear()
+            xi_out.clear()
+            time_out.clear()
+
             vx0    = position_value_photon[j][0]*1.e-1 ## mm to cm
             vy0    = position_value_photon[j][1]*1.e-1 ## mm to cm
             vz0    = position_value_photon[j][2]*1.e-1 ## mm to cm
@@ -163,17 +178,36 @@ def main():
             time_out.push_back(t0)
             xi_out.push_back(xi0)
             photonNumber += 1
+            tt_out.Fill()
+
 
         electronNumber = 0
         if(True):
             ### electrons are only collected for g+laser
             id_value_electron       = fIn['final-state/electron']['id'][()]
-            # print("this file has ",len(id_value_electron)," electrons")
+            print("this file has ",len(id_value_electron)," electrons")
             parentid_value_electron = fIn['final-state/electron']['parent_id'][()]
             momentum_value_electron = fIn['final-state/electron']['momentum'][()]
             position_value_electron = fIn['final-state/electron']['position'][()]
             weight_value_electron   = fIn['final-state/electron']['weight'][()]
             for j in range(0, len(id_value_electron)):
+                if(electronNumber%10000==0): print("processed: ", electronNumber," electrons")
+                mpid_out.clear()
+                pdgId_out.clear()
+                wgt_out.clear()
+                vx_out.clear()
+                vy_out.clear()
+                vz_out.clear()
+                px_out.clear()
+                py_out.clear()
+                pz_out.clear()
+                eta_out.clear()
+                theta_out.clear()
+                phi_out.clear()
+                E_out.clear()
+                xi_out.clear()
+                time_out.clear()
+
                 vx0    = position_value_electron[j][0]*1.e-1 ## mm to cm
                 vy0    = position_value_electron[j][1]*1.e-1 ## mm to cm
                 vz0    = position_value_electron[j][2]*1.e-1 ## mm to cm
@@ -211,9 +245,77 @@ def main():
                 time_out.push_back(t0)
                 xi_out.push_back(xi0)
                 electronNumber += 1
+                tt_out.Fill()
+        
+
+        positronNumber = 0
+        if(True):
+            ### positrons are only collected for g+laser
+            id_value_positron       = fIn['final-state/positron']['id'][()]
+            print("this file has ",len(id_value_positron)," positrons")
+            parentid_value_positron = fIn['final-state/positron']['parent_id'][()]
+            momentum_value_positron = fIn['final-state/positron']['momentum'][()]
+            position_value_positron = fIn['final-state/positron']['position'][()]
+            weight_value_positron   = fIn['final-state/positron']['weight'][()]
+            for j in range(0, len(id_value_positron)):
+                if(positronNumber%10000==0): print("processed: ", positronNumber," positrons")
+                mpid_out.clear()
+                pdgId_out.clear()
+                wgt_out.clear()
+                vx_out.clear()
+                vy_out.clear()
+                vz_out.clear()
+                px_out.clear()
+                py_out.clear()
+                pz_out.clear()
+                eta_out.clear()
+                theta_out.clear()
+                phi_out.clear()
+                E_out.clear()
+                xi_out.clear()
+                time_out.clear()
+
+                vx0    = position_value_positron[j][0]*1.e-1 ## mm to cm
+                vy0    = position_value_positron[j][1]*1.e-1 ## mm to cm
+                vz0    = position_value_positron[j][2]*1.e-1 ## mm to cm
+                t0     = position_value_positron[j][3]
+                Energy = momentum_value_positron[j][0]
+                px0    = momentum_value_positron[j][1]
+                py0    = momentum_value_positron[j][2]
+                pz0    = momentum_value_positron[j][3]
+
+                positronVec = TLorentzVector()
+                positronVec.SetPxPyPzE(px0, py0, pz0, Energy)
+
+                eta0   = positronVec.Eta()
+                theta0 = positronVec.Theta()
+                phi0   = positronVec.Phi()
+
+
+                pdgId0 = -11
+                wgt0   = weight_value_positron[j]
+                MP_ID  = str(id_value_positron[j])+"_"+str(pdgId0)
+                xi0    = float(xiInput)
+                mpid_out.push_back(str(MP_ID))
+                wgt_out.push_back(wgt0)  
+                pdgId_out.push_back(int(pdgId0))  
+                vx_out.push_back(vx0)
+                vy_out.push_back(vy0)
+                vz_out.push_back(vz0)
+                px_out.push_back(px0)
+                py_out.push_back(py0)
+                pz_out.push_back(pz0)
+                eta_out.push_back(eta0)
+                theta_out.push_back(theta0)
+                phi_out.push_back(phi0)
+                E_out.push_back(Energy)
+                time_out.push_back(t0)
+                xi_out.push_back(xi0)
+                positronNumber += 1
+                tt_out.Fill()
             
 
-        tt_out.Fill()
+        
         print("electrons ", electronNumber, " photons ", photonNumber, " in file ", name)
         
     tt_out.Write()
