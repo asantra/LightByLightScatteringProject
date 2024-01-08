@@ -177,7 +177,7 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots", s
                     .Define("nParticles", "getParticleNumbers(tru_trackId)")
                     .Define("particleWgt", "nParticles")
                     .Define("cls_geo_x_global", "getClsX(rglobal_geo)")
-                    .Define("cls_geo_x_global", "getClsY(rglobal_geo)");
+                    .Define("cls_geo_y_global", "getClsY(rglobal_geo)");
 
     /// map to store histograms
     map<string, TH1D*> prepared1DHistogram;
