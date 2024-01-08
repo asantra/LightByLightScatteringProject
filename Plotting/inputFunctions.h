@@ -116,8 +116,8 @@ std::size_t number_of_files_in_directory(std::filesystem::path path)
     return number_of_files;
 }
 
-int getParticleNumbers(vector<int>* tru_trackId){
-    int numberOfParticles = tru_trackId->size();
+int getParticleNumbers(ROOT::VecOps::RVec<int> tru_trackId){
+    int numberOfParticles = tru_trackId.size();
     return numberOfParticles;
 }
 
