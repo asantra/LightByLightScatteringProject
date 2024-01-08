@@ -153,7 +153,7 @@ void clusterPlotMaker(string inputFolder, string outputFile, string version="1",
 
     // work only with one file
     if (inGrid){
-        treeInFileS = eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave00_Event"+to_string(j)+".root";
+        treeInFileS = eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave00_Event1.root";
         cout << "file added: " << treeInFileS << endl;
         chain.Add(treeInFileS.c_str());
     }
