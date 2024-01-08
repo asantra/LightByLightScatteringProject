@@ -81,7 +81,7 @@ void prepare2DHistogram(ROOT::RDF::RInterface<ROOT::Detail::RDF::RJittedFilter, 
 }
 
 
-void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.root", string sampleTag = "Data", bool inGrid=false)
+void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.root", string sampleTag = "MC", bool inGrid=false)
 {
     // ### boolean to know which process should be done
     //  Record start time
@@ -129,7 +129,7 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.roo
     map<string, manyMaps> allHisto2Dict_Cls;
     // /// histograms
     /// the number of bins such that bin width is approximately one pixel
-    allHisto2Dict_Cls.insert(make_pair("cluster_y_vs_x", manyMaps("cluster_y_vs_x", "cls_geo_x_global", "cls_geo_y_global", ROOT::RDF::TH2DModel("cluster_y_vs_x", "cluster_y_vs_x; x [cm]; y [cm]; Particles/pixel*BX", 11286, 0, 33, 521, -0.7, 0.7))));
+    allHisto2Dict_Cls.insert(make_pair("cluster_y_vs_x", manyMaps("cluster_y_vs_x", "cls_geo_x_global", "cls_geo_y_global", ROOT::RDF::TH2DModel("cluster_y_vs_x", "cluster_y_vs_x; x [cm]; y [cm]; Particles/pixel*BX", 11286, 0, 33, 595, -0.8, 0.8))));
     
     string treeInS = "clusters";
     string treeInFileS = ""; 
@@ -146,22 +146,23 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.roo
     }
     // add all files in a given folder
     else{
-        for(int j=1; j <=2; j++){
-            try{
-                chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave00_Event"+to_string(j)+".root").c_str());
-                chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave01_Event"+to_string(j)+".root").c_str());
-                chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave02_Event"+to_string(j)+".root").c_str());
-                chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave03_Event"+to_string(j)+".root").c_str());
-                chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave04_Event"+to_string(j)+".root").c_str());
-                chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave05_Event"+to_string(j)+".root").c_str());
-                chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave06_Event"+to_string(j)+".root").c_str());
-                chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave07_Event"+to_string(j)+".root").c_str());
-                chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave08_Event"+to_string(j)+".root").c_str());
-            }
-            catch(...){
-                std::cout << " something wrong here: " << (eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave08_Event"+to_string(j)+".root").c_str() << std::endl;
-            }
-        }
+        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave00_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave01_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave02_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave03_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave04_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave05_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave06_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave07_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave08_EventAll.root").c_str());
+        // for(int j=1; j <=2; j++){
+        //     try{
+                
+        //     }
+        //     catch(...){
+        //         std::cout << " something wrong here: " << (eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave08_EventAll.root").c_str() << std::endl;
+        //     }
+        // }
     }
         
 
