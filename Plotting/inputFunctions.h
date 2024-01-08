@@ -121,12 +121,12 @@ int getParticleNumbers(ROOT::VecOps::RVec<int> tru_trackId){
     return numberOfParticles;
 }
 
-double getClsX(TVector3* cls){
-    double x = cls->X();
+double getClsX(TVector3 cls){
+    double x = cls.X();
     return x;
 }
 
-double getClsY(TVector3* cls){
-    double y = cls->Y();
+double getClsY(TVector3 cls){
+    double y = cls.Y();
     return y;
 }
