@@ -81,7 +81,7 @@ void prepare2DHistogram(ROOT::RDF::RInterface<ROOT::Detail::RDF::RJittedFilter, 
 }
 
 
-void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots_e0ppw_7.root", string sampleTag = "MC", bool inGrid=false, string signalName="e0ppw_7.0")
+void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots_e1gpc_10.0.root", string sampleTag = "MC", bool inGrid=false, string signalName="e1gpc_10.0")
 {
     // ### boolean to know which process should be done
     //  Record start time
@@ -107,8 +107,8 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots_e0p
         /// eos files on lxplus
         // eosDirS = "/eos/user/a/asantra/MuonWorkingPointFiles";
         // local files
-        // eosDirS = "/storage/agrp/arkas/AllPixGrid/ProcessedData/SignalNextTrial_e1gpc_10.0_BX1to100/";
-        eosDirS = "/storage/agrp/arkas/AllPixGrid/ProcessedData/Signal_e0ppw_7.0/";
+        eosDirS = "/storage/agrp/arkas/AllPixGrid/ProcessedData/SignalNextTrial_e1gpc_10.0_BX1to100/";
+        // eosDirS = "/storage/agrp/arkas/AllPixGrid/ProcessedData/Signal_e0ppw_7.0/";
         /// local files
         // string eosDirS = "/Users/arkasantra/arka/MCPWork/MCPFiles";
         string outputDirS = "HistFiles"; // the output directory
