@@ -131,7 +131,13 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots_e0p
     map<string, manyMaps> allHisto2Dict_Cls;
     // /// histograms
     /// the number of bins such that bin width is approximately one pixel
-    allHisto2Dict_Cls.insert(make_pair("cluster_y_vs_x", manyMaps("cluster_y_vs_x", "cls_geo_x_global", "cls_geo_y_global", ROOT::RDF::TH2DModel("cluster_y_vs_x", "cluster_y_vs_x; x [cm]; y [cm]; Particles/(pixel*BX)", 11286, 0, 33, 595, -0.8, 0.8))));
+    /// stave dimension for LUXE
+    double xMinI = 5.273;
+    double xMaxI = 32.353;
+    double yDn   = -0.626256;
+    double yUp   = 0.75;
+    double um2cm  = 0.0001;
+    allHisto2Dict_Cls.insert(make_pair("cluster_y_vs_x", manyMaps("cluster_y_vs_x", "cls_geo_x_global", "cls_geo_y_global", ROOT::RDF::TH2DModel("cluster_y_vs_x", "cluster_y_vs_x; x [cm]; y [cm]; Particles/(pixel*BX)", 900,xMinI,xMaxI, 100,yDn,yUp))));
     
     string treeInS = "clusters";
     string treeInFileS = ""; 
@@ -194,6 +200,16 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots_e0p
     prepare1DHistogram(dSel, "clsProperty", allHisto1Dict_Cls, prepared1DHistogram);
     prepare2DHistogram(dSel, "clsProperty", allHisto2Dict_Cls, prepared2DHistogram);
 
+    /////////////////////////////////////////////////
+    /////// weight histograms           /////////////
+    /////////////////////////////////////////////////
+    for (map<string, TH2D*>::iterator it = prepared2DHistogram.begin(); it != prepared2DHistogram.end(); ++it){
+        double binareacm2 = (it->second->GetXaxis()->GetBinWidth(1))*(it->second->GetYaxis()->GetBinWidth(1));
+	    double pixareacm2 = (27*um2cm)*(29*um2cm);
+	    double npixelsperbin = (binareacm2/pixareacm2);
+        it->second->Scale(1./(npixelsperbin));
+    }
+    
     
     /////////////////////////////////////////////////
     // Save histograms                            ///
