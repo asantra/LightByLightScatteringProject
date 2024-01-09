@@ -81,7 +81,7 @@ void prepare2DHistogram(ROOT::RDF::RInterface<ROOT::Detail::RDF::RJittedFilter, 
 }
 
 
-void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.root", string sampleTag = "MC", bool inGrid=false)
+void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots_e0ppw_7.root", string sampleTag = "MC", bool inGrid=false, string signalName="e0ppw_7.0")
 {
     // ### boolean to know which process should be done
     //  Record start time
@@ -96,7 +96,8 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.roo
     // work only with one file
     if (inGrid){
         // WIS cluster files
-        eosDirS = "/storage/agrp/arkas/AllPixGrid/ProcessedData/SignalNextTrial_e1gpc_10.0_BX1to100/";
+        // eosDirS = "/storage/agrp/arkas/AllPixGrid/ProcessedData/SignalNextTrial_"+signalName+"_BX1to100/";
+        eosDirS = "/storage/agrp/arkas/AllPixGrid/ProcessedData/Signal_e0ppw_7.0/";
         myFile = new TFile((inputFolder+outputFile).c_str(), "RECREATE");
         std::cout << "The output file for histograms: " << outputFile.c_str() << std::endl;
     }
@@ -106,7 +107,8 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.roo
         /// eos files on lxplus
         // eosDirS = "/eos/user/a/asantra/MuonWorkingPointFiles";
         // local files
-        eosDirS = "/storage/agrp/arkas/AllPixGrid/ProcessedData/SignalNextTrial_e1gpc_10.0_BX1to100/";
+        // eosDirS = "/storage/agrp/arkas/AllPixGrid/ProcessedData/SignalNextTrial_e1gpc_10.0_BX1to100/";
+        eosDirS = "/storage/agrp/arkas/AllPixGrid/ProcessedData/Signal_e0ppw_7.0/";
         /// local files
         // string eosDirS = "/Users/arkasantra/arka/MCPWork/MCPFiles";
         string outputDirS = "HistFiles"; // the output directory
@@ -129,7 +131,7 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.roo
     map<string, manyMaps> allHisto2Dict_Cls;
     // /// histograms
     /// the number of bins such that bin width is approximately one pixel
-    allHisto2Dict_Cls.insert(make_pair("cluster_y_vs_x", manyMaps("cluster_y_vs_x", "cls_geo_x_global", "cls_geo_y_global", ROOT::RDF::TH2DModel("cluster_y_vs_x", "cluster_y_vs_x; x [cm]; y [cm]; Particles/pixel*BX", 11286, 0, 33, 595, -0.8, 0.8))));
+    allHisto2Dict_Cls.insert(make_pair("cluster_y_vs_x", manyMaps("cluster_y_vs_x", "cls_geo_x_global", "cls_geo_y_global", ROOT::RDF::TH2DModel("cluster_y_vs_x", "cluster_y_vs_x; x [cm]; y [cm]; Particles/(pixel*BX)", 11286, 0, 33, 595, -0.8, 0.8))));
     
     string treeInS = "clusters";
     string treeInFileS = ""; 
@@ -140,27 +142,27 @@ void clusterPlotMaker(string inputFolder="", string outputFile="clusterPlots.roo
 
     // work only with one file
     if (inGrid){
-        treeInFileS = eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave00_Event1.root";
+        treeInFileS = eosDirS+"dataFile_Signal_"+signalName+"_EFieldV10p7p1pyN17Vpercm_Processed_Stave00_Event1.root";
         cout << "file added: " << treeInFileS << endl;
         chain.Add(treeInFileS.c_str());
     }
     // add all files in a given folder
     else{
-        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave00_EventAll.root").c_str());
-        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave01_EventAll.root").c_str());
-        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave02_EventAll.root").c_str());
-        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave03_EventAll.root").c_str());
-        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave04_EventAll.root").c_str());
-        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave05_EventAll.root").c_str());
-        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave06_EventAll.root").c_str());
-        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave07_EventAll.root").c_str());
-        chain.Add((eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave08_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_"+signalName+"_EFieldV10p7p1pyN17Vpercm_Processed_Stave00_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_"+signalName+"_EFieldV10p7p1pyN17Vpercm_Processed_Stave01_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_"+signalName+"_EFieldV10p7p1pyN17Vpercm_Processed_Stave02_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_"+signalName+"_EFieldV10p7p1pyN17Vpercm_Processed_Stave03_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_"+signalName+"_EFieldV10p7p1pyN17Vpercm_Processed_Stave04_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_"+signalName+"_EFieldV10p7p1pyN17Vpercm_Processed_Stave05_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_"+signalName+"_EFieldV10p7p1pyN17Vpercm_Processed_Stave06_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_"+signalName+"_EFieldV10p7p1pyN17Vpercm_Processed_Stave07_EventAll.root").c_str());
+        chain.Add((eosDirS+"dataFile_Signal_"+signalName+"_EFieldV10p7p1pyN17Vpercm_Processed_Stave08_EventAll.root").c_str());
         // for(int j=1; j <=2; j++){
         //     try{
                 
         //     }
         //     catch(...){
-        //         std::cout << " something wrong here: " << (eosDirS+"dataFile_Signal_e1gpc_10.0_EFieldV10p7p1pyN17Vpercm_Processed_Stave08_EventAll.root").c_str() << std::endl;
+        //         std::cout << " something wrong here: " << (eosDirS+"dataFile_Signal_"+signalName+"_EFieldV10p7p1pyN17Vpercm_Processed_Stave08_EventAll.root").c_str() << std::endl;
         //     }
         // }
     }
