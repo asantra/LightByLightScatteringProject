@@ -191,7 +191,7 @@ void rootFileMaker(string inputFolder, string outputFile, string version="1", st
         cout << "file added: " << treeInFileS << endl;
         chain.Add(treeInFileS.c_str());
     }
-    // add all files in a iven folder
+    // add all files in a given folder
     else{
         for(int j=1; j <=250; j++){
             chain.Add((eosDirS+inputFolder+"/run_"+std::to_string(j)+"/raw_e320_xi10_gamma10_v"+version+".root").c_str());

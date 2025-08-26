@@ -18,17 +18,19 @@ meGeV = meMeV/1000.
 MeV2GeV = 1./1000.
 
 def main():
-    photon = True
+    photon = False
     parser = argparse.ArgumentParser(description='Code to get root files from h5')
-    parser.add_argument('-x', action="store", dest="xi", type=str, default="0.5")
-    parser.add_argument('-g', action="store", dest="gamma", type=str, default="10.0")
+    parser.add_argument('-x', action="store", dest="xi", type=str, default="3")
+    parser.add_argument('-g', action="store", dest="gamma", type=str, default="0.7")
     parser.add_argument('-v', action="store", dest="version", type=str, default="1")
-    parser.add_argument('-t', action="store", dest="type", type=str, default="vertical")
+    parser.add_argument('-t', action="store", dest="type", type=str, default="horizontal")
+    parser.add_argument('-p', action="store", dest="pol", type=str, default="circular")
     args = parser.parse_args()
     xiInput      = args.xi
     gammaInput   = args.gamma
     ver          = args.version
-    collType     = args.type
+    collType     = args.type 
+    polari       = args.pol
     
     ### for local files
     # inputDir  = "/Users/arkasantra/arka/Tom_Work_Theory/Plotting/h5Files/"
@@ -39,25 +41,22 @@ def main():
         inputDir = "/storage/agrp/arkas/PtarmiganLUXEWorkAreaHorizontal/"
         storage = "/storage/agrp/arkas/PtarmiganLUXEWorkAreaHorizontal/RootFiles"
     else:
-        inputDir = "/storage/agrp/arkas/E320Files/E320WorkArea_a0_0.5_xF1B_Eachh5Weightedto1BX/"
-        storage = "/storage/agrp/arkas/E320Files/E320WorkArea_a0_0.5_xF1B_Eachh5Weightedto1BX/RootFiles"
+        inputDir = "/storage/agrp/arkas/PtarmiganLUXEWorkAreaVertical/"
+        storage = "/storage/agrp/arkas/PtarmiganLUXEWorkAreaVertical/RootFiles"
 
     p         = subprocess.Popen("mkdir -p "+storage, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err  = p.communicate()
 
 
+    # tf = TFile( storage+'/raw_lightbylight_xi'+str(xiInput)+'MeV.root', 'recreate' ) ### old convention
+    # tf = TFile( storage+'/raw_lightbylight_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'.root', 'recreate' )
+    # print("The output file: ", storage+'/raw_lightbylight_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'.root')
     ### for E320, local
     # tf = TFile( storage+'/raw_e320_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'_v'+ver+'.root', 'recreate' )
-    if(collType=="horizontal"):
-        tf = TFile( storage+'/raw_LUXE_e1gpc_10.0_horizontal.root', 'recreate' )
-        # print("The output file: ", storage+'/raw_e320_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'_v'+ver+'.root')
-        print("The output file: ", storage+'/raw_LUXE_e1gpc_10.0_horizontal.root')
-    else:
-        tf = TFile( storage+'/raw_E320_e1gpc_10.0_vertical.root', 'recreate' )
-        # print("The output file: ", storage+'/raw_e320_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'_v'+ver+'.root')
-        print("The output file: ", storage+'/raw_E320_e1gpc_10.0_vertical.root')
-
-
+    tf = TFile( storage+'/raw_LUXE_e1gpc_10.0_'+collType+'_'+polari+'.root', 'recreate' )
+    # print("The output file: ", storage+'/raw_e320_xi'+str(xiInput)+'_gamma'+str(gammaInput)+'_v'+ver+'.root')
+    print("The output file: ", storage+'/raw_LUXE_e1gpc_10.0_'+collType+'_'+polari+'.root')
+    
     tt_out    = TTree( 'tt','tt' )
     vx_out    = ROOT.std.vector( float )()
     vy_out    = ROOT.std.vector( float )()
@@ -101,7 +100,21 @@ def main():
     # print("The input h5 file directory: ", inputDir+"xi"+str(xiInput)+"_gamma"+str(gammaInput)+"/")
     # fIns = glob.glob(inputDir+"xi"+str(xiInput)+"_gamma"+str(gammaInput)+"_E320_v"+ver+"/*.h5")
     print("The input h5 file directory: ", inputDir+"run_*/")
-    fIns = glob.glob(inputDir+"run_*/*.h5")
+    if(polari=="circular"):
+      if(collType=="horizontal"):
+        fIns = glob.glob(inputDir+"run_1/*.h5")
+        fIns += glob.glob(inputDir+"run_2/*.h5")
+      else:
+        fIns = glob.glob(inputDir+"run_11/*h5")
+        fIns += glob.glob(inputDir+"run_12/*h5")
+    else:
+      if(collType=="horizontal"):
+        fIns = glob.glob(inputDir+"run_3/*.h5")
+        fIns += glob.glob(inputDir+"run_4/*.h5")
+      else:
+        fIns = glob.glob(inputDir+"run_13/*h5")
+        fIns += glob.glob(inputDir+"run_14/*h5")
+    
     print(fIns)   
     photonNumberList = []
     ##### work only on the events having same order of tracks as that of the highest tracked event
@@ -126,88 +139,87 @@ def main():
                 
         ### photons
         photonNumber = 0
-        if(True):
-            id_value_photon       = fIn['final-state/photon']['id'][()]
-            parentid_value_photon = fIn['final-state/photon']['parent_id'][()]
-            momentum_value_photon = fIn['final-state/photon']['momentum'][()]
-            position_value_photon = fIn['final-state/photon']['position'][()]
-            weight_value_photon   = fIn['final-state/photon']['weight'][()]
-            print("this file has ",len(id_value_photon)," photons")
+        id_value_photon       = fIn['final-state/photon']['id'][()]
+        parentid_value_photon = fIn['final-state/photon']['parent_id'][()]
+        momentum_value_photon = fIn['final-state/photon']['momentum'][()]
+        position_value_photon = fIn['final-state/photon']['position'][()]
+        weight_value_photon   = fIn['final-state/photon']['weight'][()]
+        print("this file has ",len(id_value_photon)," photons")
 
-            # if(highestPhotonEvents>50):
-            #     if len(id_value_photon) < highestPhotonEvents/2.0: 
-            #         print("This file ",name," has very few photons ",len(id_value_photon), " ---- NOT PROCESSING")
-            #         continue
-            # else:
-            #     if len(id_value_photon) < highestPhotonEvents/10.0: 
-            #         print("This file ",name," has very few photons ",len(id_value_photon), " ---- NOT PROCESSING")
-            #         continue
+        # if(highestPhotonEvents>50):
+        #     if len(id_value_photon) < highestPhotonEvents/2.0: 
+        #         print("This file ",name," has very few photons ",len(id_value_photon), " ---- NOT PROCESSING")
+        #         continue
+        # else:
+        #     if len(id_value_photon) < highestPhotonEvents/10.0: 
+        #         print("This file ",name," has very few photons ",len(id_value_photon), " ---- NOT PROCESSING")
+        #         continue
 
-            for j in range(0, len(id_value_photon)):
-                if(photonNumber%10000==0): print("processed: ", photonNumber," photons")
-                mpid_out.clear()
-                pdgId_out.clear()
-                wgt_out.clear()
-                vx_out.clear()
-                vy_out.clear()
-                vz_out.clear()
-                px_out.clear()
-                py_out.clear()
-                pz_out.clear()
-                eta_out.clear()
-                theta_out.clear()
-                theta_x.clear()
-                theta_y.clear()
-                phi_out.clear()
-                E_out.clear()
-                xi_out.clear()
-                time_out.clear()
+        for j in range(0, len(id_value_photon)):
+            if(photonNumber%10000==0): print("processed: ", photonNumber," photons")
+            mpid_out.clear()
+            pdgId_out.clear()
+            wgt_out.clear()
+            vx_out.clear()
+            vy_out.clear()
+            vz_out.clear()
+            px_out.clear()
+            py_out.clear()
+            pz_out.clear()
+            eta_out.clear()
+            theta_out.clear()
+            theta_x.clear()
+            theta_y.clear()
+            phi_out.clear()
+            E_out.clear()
+            xi_out.clear()
+            time_out.clear()
 
-                #### this is the wrong convention, as Ptarmigan saves position 4-vectors in (ct, \vec{r}) format - NOT (x,y,z,t) format as is done here.
-                vx0    = position_value_photon[j][0]*1.e-1 ## mm to cm
-                vy0    = position_value_photon[j][1]*1.e-1 ## mm to cm
-                vz0    = position_value_photon[j][2]*1.e-1 ## mm to cm
-                t0     = position_value_photon[j][3]
+            #### this is the wrong convention, as Ptarmigan saves position 4-vectors in (ct, \vec{r}) format - NOT (x,y,z,t) format as is done here.
+            vx0    = position_value_photon[j][0]*1.e-1 ## mm to cm
+            vy0    = position_value_photon[j][1]*1.e-1 ## mm to cm
+            vz0    = position_value_photon[j][2]*1.e-1 ## mm to cm
+            t0     = position_value_photon[j][3]
 
 
-                Energy = momentum_value_photon[j][0]
-                px0    = momentum_value_photon[j][1]
-                py0    = momentum_value_photon[j][2]
-                pz0    = momentum_value_photon[j][3]
+            Energy = momentum_value_photon[j][0]
+            px0    = momentum_value_photon[j][1]
+            py0    = momentum_value_photon[j][2]
+            pz0    = momentum_value_photon[j][3]
 
-                theta_x0 = math.atan2(px0, pz0)
-                theta_y0 = math.atan2(py0, pz0)
+            theta_x0 = math.atan2(px0, pz0)
+            theta_y0 = math.atan2(py0, pz0)
 
-                photonVec = TLorentzVector() 
-                photonVec.SetPxPyPzE(px0, py0, pz0, Energy)
+            photonVec = TLorentzVector() 
+            photonVec.SetPxPyPzE(px0, py0, pz0, Energy)
 
-                eta0   = photonVec.Eta()
-                theta0 = photonVec.Theta()
-                phi0   = photonVec.Phi()
+            eta0   = photonVec.Eta()
+            theta0 = photonVec.Theta()
+            phi0   = photonVec.Phi()
 
-                pdgId0 = 22
-                wgt0   = weight_value_photon[j]
-                MP_ID  = str(id_value_photon[j])+"_"+str(pdgId0)
-                xi0    = float(xiInput)
-                mpid_out.push_back(str(MP_ID))
-                wgt_out.push_back(wgt0)  
-                pdgId_out.push_back(int(pdgId0))  
-                vx_out.push_back(vx0)
-                vy_out.push_back(vy0)
-                vz_out.push_back(vz0)
-                px_out.push_back(px0)
-                py_out.push_back(py0)
-                pz_out.push_back(pz0)
-                eta_out.push_back(eta0)
-                theta_out.push_back(theta0)
-                theta_x.push_back(theta_x0)
-                theta_y.push_back(theta_y0)
-                phi_out.push_back(phi0)
-                E_out.push_back(Energy)
-                time_out.push_back(t0)
-                xi_out.push_back(xi0)
-                photonNumber += 1
-                tt_out.Fill()
+            pdgId0 = 22
+            wgt0   = weight_value_photon[j]
+            MP_ID  = str(id_value_photon[j])+"_"+str(pdgId0)
+            xi0    = float(xiInput)
+            mpid_out.push_back(str(MP_ID))
+            wgt_out.push_back(wgt0)  
+            pdgId_out.push_back(int(pdgId0))  
+            vx_out.push_back(vx0)
+            vy_out.push_back(vy0)
+            vz_out.push_back(vz0)
+            px_out.push_back(px0)
+            py_out.push_back(py0)
+            pz_out.push_back(pz0)
+            eta_out.push_back(eta0)
+            theta_out.push_back(theta0)
+            theta_x.push_back(theta_x0)
+            theta_y.push_back(theta_y0)
+            phi_out.push_back(phi0)
+            E_out.push_back(Energy)
+            time_out.push_back(t0)
+            xi_out.push_back(xi0)
+            photonNumber += 1
+            tt_out.Fill()
 
 
         electronNumber = 0
@@ -297,7 +309,7 @@ def main():
             position_value_positron = fIn['final-state/positron']['position'][()]
             weight_value_positron   = fIn['final-state/positron']['weight'][()]
             for j in range(0, len(id_value_positron)):
-                if(positronNumber%1==0): print("processed: ", positronNumber," positrons")
+                if(positronNumber%10000==0): print("processed: ", positronNumber," positrons")
                 mpid_out.clear()
                 pdgId_out.clear()
                 wgt_out.clear()
@@ -377,3 +389,4 @@ if __name__=="__main__":
     intime = time.time()
     main()
     print("----- the time taken ", time.time() - intime, " s")
+

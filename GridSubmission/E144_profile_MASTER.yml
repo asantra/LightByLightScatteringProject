@@ -1,0 +1,47 @@
+---
+# Example of how the angular profile of the emitted gamma rays
+# could be used to infer the collision a_0.
+# See Blackburn et al, PRAB 23, 064001 (2020), arXiv:1911.02349
+
+control:
+  lcfa: false
+  rng_seed: RNDMSEED
+  pair_creation: true
+  ### increasing the pair rate, 
+  increase_pair_rate_by: PAIRRATE
+
+### parameters from E144 slac-pub-8063
+laser:
+  a0: A0VALUE
+  # wavelength: 1.053 * micro ## for IR
+  wavelength: 0.527 * micro ## for green
+  fwhm_duration: 1.5 * pico
+  waist: 2.8 * micro 
+  ### for E144, the laser focused area for Infra-red light is 25 um^2. So pi*waist^2 = 25 um^2. This gives a waist of 2.8 um.
+  # polarization: circular
+  polarization: linear
+
+beam:
+  ne: 10000000
+  species: electron
+  charge: 5000000000 * e
+  gamma: 46.6 * GeV / (m * c^2)
+  radius: 60.0 * micro
+  length: 1000.0 * micro
+  rms_divergence: 0.07 * milli
+  collision_angle: 17.0 * degree
+  collision_plane: horizontal
+  
+
+output:
+  ident: auto
+  dump_all_particles: hdf5
+  coordinate_system: beam
+  discard_background_e: true
+  electron: 
+    - energy
+  photon:
+    - energy
+  positron:
+    - energy
+  

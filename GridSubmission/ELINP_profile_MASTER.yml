@@ -1,0 +1,46 @@
+---
+# Example of how the angular profile of the emitted gamma rays
+# could be used to infer the collision a_0.
+# See Blackburn et al, PRAB 23, 064001 (2020), arXiv:1911.02349
+#####################################
+# this is for the ELI_NP setup.   ###
+#####################################
+
+control:
+  lcfa: true
+  rng_seed: RNDMSEED
+  pair_creation: true
+  ### increasing the pair rate, so that the final production of positrons increases by a factor of 1000000000, added on August 20 2024, this is for E320;
+  ### for ELINP it is 1000
+  increase_pair_rate_by: PAIRRATE
+
+### parameters from Noam's slide on ELI-NP
+### laser wavelength: 810 nm
+laser:
+  a0: A0VALUE
+  wavelength: 0.81 * micro
+  fwhm_duration: 25.0 * femto
+  waist: 15.0 * micro
+  polarization: linear
+
+beam:
+  species: electron
+  collision_angle: 0.0
+  from_hdf5:
+    # file: inputbeam_electron_ELINP_1nC_ITERATION.h5
+    file: inputbeam_electron_ELINP_6p25e6_electrons_ITERATION.h5
+    distance_bt_ips: 0.0 # metres
+    # max_angle: 0.1 * milli
+
+output:
+  ident: auto
+  dump_all_particles: hdf5
+  dump_decayed_photons: true
+  coordinate_system: beam
+  discard_background_e: true
+  electron:
+    - energy
+  photon:
+    - energy
+  positron:
+    - energy

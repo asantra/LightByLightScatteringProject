@@ -1,0 +1,49 @@
+---
+# Example of how the angular profile of the emitted gamma rays
+# could be used to infer the collision a_0.
+# See Blackburn et al, PRAB 23, 064001 (2020), arXiv:1911.02349
+
+control:
+  lcfa: false
+  rng_seed: RNDMSEED
+  pair_creation: true
+  ### increasing the pair rate, so that the final production of positrons increases by a factor of 1000000000, added on August 20 2024
+  increase_pair_rate_by: PAIRRATE
+
+### parameters updated after Sebastian's email on September 2, 2024
+laser:
+  a0: A0VALUE
+  wavelength: 0.8 * micro
+  fwhm_duration: 50.0 * femto
+  waist: 2.0 * micro
+  polarization: linear
+
+beam:
+  ne: 25000000
+  # ne: 100000000
+  species: electron
+  ### weighting the electrons to have 2 nC final charge, added on August 20 2024
+  charge: 12500000000 * e
+  gamma: 10.0 * GeV / (m * c^2)
+  # gamma: 13.0 * GeV / (m * c^2)
+  ### from Sebastian's email on September 2, 2024
+  ### The electron beam is likely not symmetric; last time we got ~20 micron (longitudinally), ~50 micron (horisontally) and ~30 micron (vertically); all of them are RMS values
+  ### The average radius is taken to be 40 micor m
+  radius: 40.0 * micro
+  length: 20.0 * micro
+  rms_divergence: 0.07 * milli
+  collision_angle: 30.0 * degree
+  ### changing the collision_plane to horizontal after detailed discussion with Noam and Sasha on 20 August 2024
+  collision_plane: horizontal
+
+output:
+  ident: auto
+  dump_all_particles: hdf5
+  coordinate_system: beam
+  discard_background_e: true
+  electron:
+    - energy
+  photon:
+    - energy
+  positron:
+    - energy
